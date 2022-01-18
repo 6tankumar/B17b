@@ -31,11 +31,9 @@
                 <div>
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>User Name</mat-label>
-                        <input type="text" matInput formControlName="userName" />
+                        <input (blur)="userNameAvail()" type="text" matInput formControlName="userName" />
                         <mat-error *ngIf="userName.hasError('required')">User Name is <strong>required</strong></mat-error>
-                        <mat-error *ngIf="userName.touched && userName.hasError('User')">
-                            Username already exists
-                        </mat-error>
+                        <mat-hint id="userVal" *ngIf="Name && userName.dirty">Username already exists</mat-hint>
                     </mat-form-field>
                 </div>
 

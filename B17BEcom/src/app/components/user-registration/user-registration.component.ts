@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-registration',
@@ -13,25 +15,25 @@ export class UserRegistrationComponent implements OnInit {
   show = true;
   details: any;
   userRegister: any;
+  Name: boolean = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) { }
+  constructor(private fb: FormBuilder, private http: HttpClient,
+    private user: UserService, private router : Router) { }
 
   ngOnInit() {
 
     this.userRegister = this.fb.group({
-    firstName: ['', [Validators.required]],
-    lastName: ['', [Validators.required]],
-    userName: ['', [Validators.required ]],
-    passWord: ['', [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')]],
-    confirmPassword: ['', [Validators.required]],
-    gender: ['', [Validators.required]]
-  }, {
-    validators : this.confirmPassVal
-  },);
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      userName: ['', [Validators.required]],
+      passWord: ['', [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')]],
+      confirmPassword: ['', [Validators.required]],
+      gender: ['', [Validators.required]]
+    }, {
+      validators: this.confirmPassVal
+    });
 
-
-}
-
+  }
 
   confirmPassVal(control: AbstractControl) {
     const password: string = control.get('passWord')?.value;
@@ -42,10 +44,8 @@ export class UserRegistrationComponent implements OnInit {
   }
 
   onSubmit() {
-    this.http.post<any>('https://bookcart.azurewebsites.net/api/user', this.userRegister.value).subscribe((res: any) => {
-
-      window.alert("Registered Successfully")
-
+    this.http.post<any>('https://bookcart.azurewebsites.net/api/user', this.userRegister.value)
+    .subscribe((res: any) => {
     })
   }
 
@@ -68,5 +68,13 @@ export class UserRegistrationComponent implements OnInit {
   get confirmPassword() {
     return this.userRegister.get('confirmPassword');
   }
+
+  userNameAvail() {
+    let valueGetter = this.userRegister.value.userName
+    this.user.userNameAvail(valueGetter).subscribe((resp: any) => {
+      this.Name = resp
+    })
+  }
+
 
 }
