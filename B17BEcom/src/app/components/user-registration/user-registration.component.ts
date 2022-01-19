@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'src/app/services/user.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-registration',
@@ -13,12 +12,11 @@ export class UserRegistrationComponent implements OnInit {
 
   hide = true;
   show = true;
-  details: any;
-  userRegister: any;
+  userRegister!: FormGroup;
   Name: boolean = false;
 
   constructor(private fb: FormBuilder, private http: HttpClient,
-    private user: UserService, private router : Router) { }
+    private user: UserService) { }
 
   ngOnInit() {
 
@@ -75,6 +73,5 @@ export class UserRegistrationComponent implements OnInit {
       this.Name = resp
     })
   }
-
 
 }
